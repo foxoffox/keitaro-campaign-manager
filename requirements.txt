@@ -1,0 +1,7 @@
+alembic>=1.16,<2
+fastapi>=0.121,<1
+httpx>=0.28,<1
+pycountry>=24.6.1,<27
+pydantic-settings>=2.11,<3
+sqlalchemy>=2.0.44,<3
+uvicorn>=0.38,<1

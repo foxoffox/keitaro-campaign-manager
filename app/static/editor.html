@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Редактор офферов · Keitaro Campaign Manager</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/editor.js" defer></script>
+</head>
+<body>
+  <header class="rail">
+      <a href="/editor" class="brand"><span class="brand-icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17V7l6 5-6 5z M11 17V7l6 5-6 5z M19 7v10"/></svg></span><span>Keitaro<small>Campaign Manager</small></span></a>
+      <nav class="app-nav" aria-label="Разделы"><a href="/editor" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h7v7H3z M14 4h7v7h-7z M3 15h7v5H3z M14 15h7v5h-7z"/></svg>Редактор офферов</a><a href="/" ><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14 M5 12h14"/></svg>Новая кампания</a></nav>
+    </header>
+  <main class="shell editor-page">
+    <header class="page-heading">
+      <h1>Редактор офферов</h1>
+    </header>
+    <div class="panel editor-toolbar">
+      <div class="field campaign-picker">
+        <label for="campaign">Кампания</label>
+        <select id="campaign" disabled></select>
+      </div>
+      <button id="refresh" class="secondary" type="button" disabled>Обновить из Keitaro</button>
+    </div>
+    <p id="notice" class="feedback" role="status" aria-live="polite" tabindex="-1" hidden></p>
+
+    <div id="editor-loading" class="editor-grid skeleton-grid" aria-hidden="true">
+      <div class="metrics"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+      <div class="skeleton"></div><div class="skeleton"></div>
+    </div>
+    <div id="editor" class="editor-grid" hidden>
+      <section class="metrics" aria-label="Сводка потока">
+        <div class="metric panel"><h2>Активные офферы</h2><b id="active-count"></b><div class="matrix" id="activity-map" aria-hidden="true"></div><small id="active-caption"></small></div>
+        <div class="metric panel allocation"><h2>Распределено</h2><div class="ring"><b id="total-share"></b></div></div>
+        <div class="metric panel"><h2>Закреплено</h2><b id="pinned-share"></b><div class="meter" aria-hidden="true"><i id="pin-bar"></i></div><small id="pin-caption"></small></div>
+      </section>
+      <section class="panel comparison" aria-labelledby="comparison-title">
+        <header class="editor-heading">
+          <h2 id="comparison-title">Доли трафика</h2>
+          <p class="series-key"><span>В Keitaro</span><span id="draft-key">Черновик</span></p>
+        </header>
+        <div id="comparison-rows"></div>
+        <p id="empty-comparison" class="hint" hidden>В потоке нет активных офферов.</p>
+      </section>
+        <section class="panel offer-add" aria-labelledby="add-title">
+          <h2 id="add-title">Добавить оффер</h2>
+          <form id="add-offer" class="add-form">
+            <div class="field">
+              <label for="offer-search">Поиск по названию или ID</label>
+              <input id="offer-search" type="search" autocomplete="off" placeholder="Например, 18813">
+            </div>
+            <div class="field">
+              <label for="offer-choice">Оффер из справочника</label>
+              <select id="offer-choice" required></select>
+              <p id="catalog-hint" class="hint" hidden></p>
+            </div>
+            <button id="add-button" type="submit">Добавить в черновик</button>
+          </form>
+        </section>
+      <section class="panel editor-offers" aria-labelledby="offers-title">
+        <div class="editor-heading">
+          <div>
+            <h2 id="offers-title">Офферы потока</h2>
+            <p class="hint" id="offer-stream"></p>
+          </div>
+          <p id="draft-state" class="editor-state" role="status" tabindex="-1"></p>
+        </div>
+        <p id="share-warning" class="feedback" data-state="validation" role="status" hidden></p>
+        <p id="conflict" class="feedback" data-state="error" role="status" hidden>
+          Исходное состояние потока больше не совпадает с Keitaro. Отмени черновик, чтобы перейти к последней версии.
+        </p>
+        <p id="publication-pending" class="feedback" data-state="validation" role="status" hidden>
+          Публикация ещё не подтверждена. Обнови состояние из Keitaro.
+        </p>
+        <div class="offer-columns" aria-hidden="true"><span>Оффер</span><span>Статус</span><span>Доля</span><span>Действия</span></div>
+        <div id="offer-rows" class="offer-rows" role="list" aria-label="Офферы в потоке"></div>
+        <p id="empty-offers" class="hint" hidden>К потоку ещё не привязаны офферы.</p>
+        <div class="draft-actions">
+          <button id="cancel-draft" class="secondary" type="button" hidden>Отменить черновик</button>
+          <button id="publish-draft" type="button" hidden>Опубликовать в Keitaro</button>
+        </div>
+      </section>
+
+        <aside class="panel flow-panel" aria-labelledby="flows-title">
+          <h2 id="flows-title">Потоки кампании</h2>
+          <ol class="routes">
+            <li><span id="geo-flow" class="route-condition"></span><strong>Переход на Google</strong></li>
+            <li><span id="fallback-flow" class="route-condition"></span><strong>Поток офферов</strong></li>
+          </ol>
+          <p id="campaign-state" class="hint flow-state"></p>
+        </aside>
+    </div>
+  </main>
+</body>
+</html>

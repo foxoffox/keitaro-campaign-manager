@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Новая кампания · Keitaro Campaign Manager</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/campaigns.js" defer></script>
+</head>
+<body>
+  <header class="rail">
+      <a href="/editor" class="brand"><span class="brand-icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17V7l6 5-6 5z M11 17V7l6 5-6 5z M19 7v10"/></svg></span><span>Keitaro<small>Campaign Manager</small></span></a>
+      <nav class="app-nav" aria-label="Разделы"><a href="/editor" ><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h7v7H3z M14 4h7v7h-7z M3 15h7v5H3z M14 15h7v5h-7z"/></svg>Редактор офферов</a><a href="/" aria-current="page"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14 M5 12h14"/></svg>Новая кампания</a></nav>
+    </header>
+  <main class="shell create-page">
+    <header class="page-heading">
+      <h1>Новая кампания</h1>
+      <p>Создай два потока с маршрутизацией по стране.</p>
+    </header>
+    <p class="connection" id="connection" role="status">Загрузка справочников…</p>
+    <div id="catalog-loading" class="skeleton" aria-hidden="true"></div>
+    <div id="create-workspace" hidden>
+      <form id="campaign-form" class="panel" aria-labelledby="settings-title">
+        <h2 id="settings-title">Настройки</h2>
+        <fieldset id="fields" disabled>
+          <div class="field">
+            <label for="name">Название кампании</label>
+            <input id="name" name="name" required maxlength="255" placeholder="Например, Австралия / Тест" aria-describedby="name-error">
+            <span id="name-error" class="field-error"></span>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="country">GEO</label>
+              <input id="country" name="country" required maxlength="2" pattern="[A-Za-z]{2}" spellcheck="false" autocapitalize="characters" placeholder="AU" aria-describedby="country-hint country-error">
+              <span id="country-hint" class="hint">Двухбуквенный код страны</span>
+              <span id="country-error" class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="domain_id">Домен</label>
+              <select id="domain_id" name="domain_id" required aria-describedby="domain_id-error"></select>
+              <span id="domain_id-error" class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="group_id">Группа кампаний</label>
+              <select id="group_id" name="group_id" required aria-describedby="group_id-error"></select>
+              <span id="group_id-error" class="field-error"></span>
+            </div>
+            <div class="field">
+              <label for="traffic_source_id">Источник трафика</label>
+              <select id="traffic_source_id" name="traffic_source_id" required aria-describedby="traffic_source_id-error"></select>
+              <span id="traffic_source_id-error" class="field-error"></span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="offer_id">Оффер</label>
+            <select id="offer_id" name="offer_id" required aria-describedby="offer_id-error"></select>
+            <span id="offer_id-error" class="field-error"></span>
+          </div>
+        </fieldset>
+        <div class="route-preview" role="group" aria-label="Предпросмотр маршрутов">
+          <span class="route-preview-label">Маршруты</span>
+          <span class="route-preview-item"><span id="geo-preview">Выбранное GEO</span> → <strong>Google</strong></span>
+          <span class="route-preview-item">Остальные страны → <strong id="offer-preview">Выбранный оффер</strong></span>
+        </div>
+        <div class="form-actions">
+          <button type="submit" id="create" disabled>Создать кампанию</button>
+          <button class="secondary" type="button" id="reload" hidden>Обновить справочники</button>
+        </div>
+        <p id="result" class="feedback" tabindex="-1" role="status" hidden></p>
+        <a id="open-editor" class="editor-link" hidden>Открыть в редакторе</a>
+      </form>
+    </div>
+  </main>
+</body>
+</html>
